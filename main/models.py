@@ -4,11 +4,18 @@ from django.db import models
 
 # Pip Modules
 import datetime 
+from location_field.models.plain import PlainLocationField
 
 # Custom Modules
 from .validators import validate_file_extension
 
 
+# Configuration Variables
+LOCATION_FIELD = {
+    'map.provider': 'google',
+}
+
+# Class Models
 class Course(models.Model):
     coursename = models.CharField(max_length=100)
 
@@ -27,7 +34,9 @@ class Student(models.Model):
     age = models.IntegerField(default=0)
     dob = models.DateField(blank=True, default=datetime.date.today())
 
-    address1 = models.CharField(max_length=500, blank=True)
+    # address1 = models.CharField(max_length=500, blank=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    address1 = PlainLocationField(based_fields=['city'], zoom=7)
     address2 = models.CharField(max_length=500, blank=True)
 
     email = models.EmailField(blank=True)
